@@ -37,7 +37,7 @@ public class ClassExtractor {
 
             Manifest manifest = new Manifest();
             manifest.getMainAttributes().put(Attributes.Name.MANIFEST_VERSION, "1.0");
-            manifest.getMainAttributes().put(new Attributes.Name("Created-By"), "ClassExtractor");
+            manifest.getMainAttributes().put(new Attributes.Name("Clazz"), "ClassExtractor");
 
             try (FileOutputStream fos = new FileOutputStream(outputJarPath);
                  JarOutputStream jos = new JarOutputStream(fos, manifest)) {
@@ -75,7 +75,7 @@ public class ClassExtractor {
         List<Integer> startIndices = findMarkerIndices(fileBytes, CLASS_MAGIC_NUMBER);
 
         if (startIndices.isEmpty()) {
-            return result; // No markers found
+            return result; 
         }
 
         System.out.println("Found " + startIndices.size() + " occurrences of the magic number.");
@@ -85,14 +85,11 @@ public class ClassExtractor {
             int endIndex;
 
             if (i + 1 < startIndices.size()) {
-                // End is the start of the next marker
                 endIndex = startIndices.get(i + 1);
             } else {
-                // This is the last marker, segment goes to the end of the file
                 endIndex = fileBytes.length;
             }
 
-            // Ensure the segment has a positive length
             if (startIndex < endIndex) {
                 int length = endIndex - startIndex;
                 byte[] classData = new byte[length];
